@@ -4,6 +4,7 @@ import os
 import socket
 import subprocess
 import tempfile
+import time
 import base64
 
 from pathlib import Path
@@ -221,6 +222,33 @@ st.markdown(
         .stLinkButton > a:hover {{
             background: #d9b100;
             color: #111111;
+        }}
+
+
+        .custom-loader {{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 0;
+            color: #111111;
+            font-size: 14px;
+            font-weight: 600;
+        }}
+
+        .custom-loader-circle {{
+            width: 22px;
+            height: 22px;
+            border: 3px solid #d9d9d9;
+            border-top-color: #f2c500;
+            border-radius: 50%;
+            animation: effective-spin .8s linear infinite;
+        }}
+
+        @keyframes effective-spin {{
+            to {{
+                transform: rotate(360deg);
+            }}
         }}
 
         @media (max-width: 900px) {{
@@ -688,16 +716,31 @@ def necesita_conversion_mp4(archivo: dict) -> bool:
 
 st.markdown('<div class="player-title">Reproductor de creativo</div>', unsafe_allow_html=True)
 
+indicador_carga = st.empty()
+indicador_carga.markdown(
+    """
+    <div class="custom-loader">
+        <div class="custom-loader-circle"></div>
+        <div>Cargando creativo...</div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Da tiempo al navegador para pintar el indicador antes de iniciar
+# la descarga, conversión y creación del reproductor.
+time.sleep(0.15)
+
 url = st.query_params.get("url", "")
 
 if not url:
+    indicador_carga.empty()
     st.info("Este enlace no contiene un creativo para reproducir.")
 else:
     try:
         validar_url_publica(url)
 
-        with st.spinner("Cargando creativo..."):
-            archivo = descargar_archivo(url)
+        archivo = descargar_archivo(url)
 
         if archivo["tipo"] == "audio":
             st.audio(
@@ -726,6 +769,9 @@ else:
         else:
             st.error("No se pudo identificar el formato del creativo.")
 
+        # Se elimina únicamente cuando el reproductor ya fue creado.
+        indicador_carga.empty()
+
         enlace_compartir = (
             f"{URL_APP.rstrip('/')}/?url={quote(url, safe='')}"
         )
@@ -738,9 +784,11 @@ else:
         st.link_button("Abrir enlace directo", enlace_compartir)
 
     except requests.exceptions.Timeout:
+        indicador_carga.empty()
         st.error("El servidor tardó demasiado en responder.")
 
     except requests.exceptions.HTTPError as error:
+        indicador_carga.empty()
         codigo = (
             error.response.status_code
             if error.response is not None
@@ -749,7 +797,9 @@ else:
         st.error(f"El servidor respondió con el error HTTP {codigo}.")
 
     except requests.exceptions.RequestException as error:
+        indicador_carga.empty()
         st.error(f"No se pudo descargar el contenido: {error}")
 
     except Exception as error:
+        indicador_carga.empty()
         st.error(f"Ocurrió un error: {error}")
