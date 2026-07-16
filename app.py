@@ -6,6 +6,7 @@ import subprocess
 import tempfile
 import time
 import base64
+import html
 
 from pathlib import Path
 from urllib.parse import quote, urljoin, urlparse
@@ -184,6 +185,29 @@ st.markdown(
             margin: 6px 0 0 0 !important;
         }}
 
+        .creative-description {{
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin: 0 0 7px 0;
+            padding: 6px 10px;
+            background: #f5f5f5;
+            border-left: 4px solid #f2c500;
+            color: #111111;
+            font-size: 12px;
+            line-height: 1.25;
+            box-sizing: border-box;
+        }}
+
+        .creative-description-item {{
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }}
+
+        .creative-description-label {{
+            font-weight: 800;
+        }}
+
         .share-label {{
             font-size: 12px;
             font-weight: 600;
@@ -336,6 +360,15 @@ st.markdown(
             .player-title {{
                 font-size: 19px;
             }}
+
+            .creative-description {{
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 3px;
+                font-size: 11px;
+                padding: 5px 8px;
+            }}
+
 
             [data-testid="stVideo"] video {{
                 max-height: 52vh !important;
@@ -716,6 +749,41 @@ def necesita_conversion_mp4(archivo: dict) -> bool:
 
 st.markdown('<div class="player-title">Reproductor de creativo</div>', unsafe_allow_html=True)
 
+url = st.query_params.get("url", "")
+marca = st.query_params.get("marca", "")
+version = st.query_params.get("version", "")
+
+# Streamlit puede entregar listas cuando un parámetro aparece varias veces.
+if isinstance(url, list):
+    url = url[0] if url else ""
+if isinstance(marca, list):
+    marca = marca[0] if marca else ""
+if isinstance(version, list):
+    version = version[0] if version else ""
+
+marca = str(marca).strip()
+version = str(version).strip()
+
+if marca or version:
+    marca_segura = html.escape(marca or "Sin información")
+    version_segura = html.escape(version or "Sin información")
+
+    st.markdown(
+        f"""
+        <div class="creative-description">
+            <div class="creative-description-item">
+                <span class="creative-description-label">Marca:</span>
+                {marca_segura}
+            </div>
+            <div class="creative-description-item">
+                <span class="creative-description-label">Versión:</span>
+                {version_segura}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
 indicador_carga = st.empty()
 indicador_carga.markdown(
     """
@@ -730,8 +798,6 @@ indicador_carga.markdown(
 # Da tiempo al navegador para pintar el indicador antes de iniciar
 # la descarga, conversión y creación del reproductor.
 time.sleep(0.15)
-
-url = st.query_params.get("url", "")
 
 if not url:
     indicador_carga.empty()
@@ -773,7 +839,10 @@ else:
         indicador_carga.empty()
 
         enlace_compartir = (
-            f"{URL_APP.rstrip('/')}/?url={quote(url, safe='')}"
+            f"{URL_APP.rstrip('/')}/"
+            f"?url={quote(url, safe='')}"
+            f"&marca={quote(marca, safe='')}"
+            f"&version={quote(version, safe='')}"
         )
 
         st.markdown(
