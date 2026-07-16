@@ -175,95 +175,97 @@ st.markdown(
             background: #d9b100;
             color: #111111;
         }}
+    
 
-    @media (max-width: 900px) {
+    @media (max-width: 900px) {{
     .effective-header-inner,
-    .effective-footer-inner {
+    .effective-footer-inner {{
         padding: 0 16px;
-    }
+    }}
 
-    .effective-header img {
+    .effective-header img {{
         width: 150px;
-    }
+    }}
 
-    .effective-footer img {
+    .effective-footer img {{
         width: 165px;
-    }
+    }}
 
-    .effective-header-title {
+    .effective-header-title {{
         font-size: 12px;
-    }
+    }}
 
-    .effective-footer-text {
+    .effective-footer-text {{
         font-size: 11px;
-    }
-}
+    }}
+}}
 
-@media (max-width: 600px) {
-    .effective-header {
+@media (max-width: 600px) {{
+    .effective-header {{
         height: 64px;
-    }
+    }}
 
-    .effective-footer {
+    .effective-footer {{
         height: 78px;
-    }
+    }}
 
     .effective-header-inner,
-    .effective-footer-inner {
+    .effective-footer-inner {{
         padding: 0 12px;
         gap: 10px;
-    }
+    }}
 
-    .effective-header img {
+    .effective-header img {{
         width: 125px;
         max-width: 42vw;
-    }
+    }}
 
-    .effective-footer img {
+    .effective-footer img {{
         width: 135px;
         max-width: 48vw;
-    }
+    }}
 
-    .effective-header-title {
+    .effective-header-title {{
         font-size: 10px;
         text-align: right;
         line-height: 1.2;
         max-width: 45vw;
-    }
+    }}
 
-    .effective-footer-text {
+    .effective-footer-text {{
         font-size: 10px;
         text-align: right;
         max-width: 38vw;
-    }
+    }}
 
-    .block-container {
+    .block-container {{
         padding-left: 12px;
         padding-right: 12px;
-    }
-}
+    }}
+}}
 
-@media (max-width: 420px) {
+@media (max-width: 420px) {{
     .effective-header-inner,
-    .effective-footer-inner {
+    .effective-footer-inner {{
         justify-content: center;
-    }
+    }}
 
     .effective-header-title,
-    .effective-footer-text {
+    .effective-footer-text {{
         display: none;
-    }
+    }}
 
-    .effective-header img {
+    .effective-header img {{
         width: 145px;
         max-width: 70vw;
-    }
+    }}
 
-    .effective-footer img {
+    .effective-footer img {{
         width: 145px;
         max-width: 70vw;
-    }
-}          
+    }}
+}}
+        
     </style>
 
     <div class="effective-header">
