@@ -30,171 +30,206 @@ st.set_page_config(
 st.markdown(
     f"""
     <style>
-        .stApp {{
+        html,
+        body,
+        [data-testid="stAppViewContainer"],
+        .stApp {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .stApp {
             background: #ffffff;
-        }}
+        }
 
-        header[data-testid="stHeader"] {{
+        header[data-testid="stHeader"] {
             background: transparent;
-        }}
+            height: 0;
+        }
 
-        [data-testid="stToolbar"] {{
-            display: none;
-        }}
+        [data-testid="stToolbar"],
+        [data-testid="stDecoration"],
+        [data-testid="stStatusWidget"],
+        #MainMenu,
+        footer {
+            display: none !important;
+        }
 
-        #MainMenu {{
-            visibility: hidden;
-        }}
+        .block-container {
+            width: 100%;
+            max-width: 1060px;
+            height: calc(100vh - 122px);
+            margin: 0 auto;
+            padding: 66px 22px 62px 22px !important;
+            overflow: hidden;
+        }
 
-        footer {{
-            visibility: hidden;
-        }}
-
-        .block-container {{
-            max-width: 1120px;
-            padding-top: 105px;
-            padding-bottom: 135px;
-        }}
-
-        .effective-header {{
+        .effective-header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 74px;
+            height: 58px;
             background: #050505;
             z-index: 9999;
             display: flex;
             align-items: center;
             border-top: 1px solid #7a7a7a;
             box-shadow: 0 1px 4px rgba(0,0,0,.18);
-        }}
+        }
 
-        .effective-header-inner {{
+        .effective-header-inner {
             width: 100%;
             max-width: 1060px;
             margin: 0 auto;
+            padding: 0 22px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 22px;
-        }}
+        }
 
-        .effective-header img {{
-            width: 185px;
+        .effective-header img {
+            width: 165px;
             height: auto;
             display: block;
-        }}
+        }
 
-        .effective-header-title {{
+        .effective-header-title {
             color: #f2c500;
-            font-size: 14px;
+            font-size: 12px;
             letter-spacing: .04em;
-            font-weight: 500;
-        }}
+            font-weight: 600;
+        }
 
-        .effective-footer {{
+        .effective-footer {
             position: fixed;
             left: 0;
             right: 0;
             bottom: 0;
-            height: 105px;
+            height: 64px;
             background: #050505;
             z-index: 9999;
             display: flex;
             align-items: center;
-        }}
+        }
 
-        .effective-footer-inner {{
+        .effective-footer-inner {
             width: 100%;
             max-width: 1060px;
             margin: 0 auto;
+            padding: 0 22px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 22px;
-        }}
+        }
 
-        .effective-footer img {{
-            width: 200px;
+        .effective-footer img {
+            width: 165px;
             height: auto;
             display: block;
-        }}
+        }
 
-        .effective-footer-text {{
+        .effective-footer-text {
             color: #d8d8d8;
-            font-size: 13px;
-        }}
+            font-size: 11px;
+        }
 
-        .player-shell {{
-            background: #ffffff;
-            border: 1px solid #e2e2e2;
-            border-radius: 2px;
-            box-shadow: 0 8px 26px rgba(0,0,0,.08);
-            padding: 28px;
-            margin-top: 8px;
-        }}
-
-        .player-title {{
-            font-size: 25px;
+        .player-title {
+            font-size: 20px;
+            line-height: 1.1;
             font-weight: 700;
-            margin-bottom: 18px;
+            margin: 0 0 8px 0;
             color: #111111;
-        }}
+        }
 
-        .share-label {{
-            font-size: 14px;
+        [data-testid="stVideo"] {
+            margin: 0 !important;
+        }
+
+        [data-testid="stVideo"] video {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+            max-height: calc(100vh - 255px) !important;
+            object-fit: contain;
+            background: #000000;
+        }
+
+        [data-testid="stAudio"] {
+            margin: 8px 0 0 0 !important;
+        }
+
+        .share-label {
+            font-size: 12px;
             font-weight: 600;
             color: #111111;
-            margin-top: 22px;
-            margin-bottom: 8px;
-        }}
+            margin-top: 7px;
+            margin-bottom: 3px;
+        }
 
-        .stTextInput > div > div > input {{
-            border-radius: 2px;
-        }}
+        [data-testid="stCode"] {
+            margin: 0 !important;
+        }
 
-        .stButton > button,
-        .stLinkButton > a {{
+        [data-testid="stCode"] pre {
+            padding: 6px 9px !important;
+            font-size: 10px !important;
+            line-height: 1.15 !important;
+            max-height: 42px;
+            overflow: hidden;
+        }
+
+        .stLinkButton {
+            margin-top: 3px;
+        }
+
+        .stLinkButton > a {
+            min-height: 28px;
+            padding: 4px 12px;
             border-radius: 2px;
             background: #f2c500;
             color: #111111;
             border: 0;
+            font-size: 11px;
             font-weight: 700;
-        }}
+        }
 
-        .stButton > button:hover,
-        .stLinkButton > a:hover {{
+        .stLinkButton > a:hover {
             background: #d9b100;
             color: #111111;
-        }}
+        }
 
-        @media (max-width: 700px) {{
-            .block-container {{
-                padding-top: 95px;
-                padding-bottom: 125px;
-            }}
+        @media (max-width: 700px) {
+            html,
+            body,
+            [data-testid="stAppViewContainer"],
+            .stApp {
+                overflow: auto;
+            }
 
-            .effective-header-title {{
+            .block-container {
+                height: auto;
+                padding: 64px 14px 72px 14px !important;
+                overflow: visible;
+            }
+
+            .effective-header-title,
+            .effective-footer-text {
                 display: none;
-            }}
+            }
 
-            .effective-header img {{
-                width: 155px;
-            }}
+            .effective-header img {
+                width: 145px;
+            }
 
-            .effective-footer-inner {{
+            .effective-footer-inner {
                 justify-content: center;
-            }}
+            }
 
-            .effective-footer-text {{
-                display: none;
-            }}
-
-            .player-shell {{
-                padding: 18px;
-            }}
-        }}
+            [data-testid="stVideo"] video {
+                max-height: 55vh !important;
+            }
+        }
     </style>
 
     <div class="effective-header">
@@ -532,7 +567,6 @@ def necesita_conversion_mp4(archivo: dict) -> bool:
     )
 
 
-st.markdown('<div class="player-shell">', unsafe_allow_html=True)
 st.markdown('<div class="player-title">Reproductor de creativo</div>', unsafe_allow_html=True)
 
 url = st.query_params.get("url", "")
@@ -601,4 +635,3 @@ else:
     except Exception as error:
         st.error(f"Ocurrió un error: {error}")
 
-st.markdown("</div>", unsafe_allow_html=True)
