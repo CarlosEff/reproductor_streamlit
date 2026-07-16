@@ -510,8 +510,7 @@ def detectar_tipo_archivo(
     return None, extension_url or ".bin", content_type_limpio or "application/octet-stream"
 
 
-@st.cache_data(show_spinner=False, ttl=1800)
-def descargar_archivo(url: str) -> dict:
+def descargar_archivo(url: str, progreso=None) -> dict:
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -537,6 +536,7 @@ def descargar_archivo(url: str) -> dict:
 
         bloques = []
         total = 0
+        total_esperado = int(content_length) if content_length else None
 
         for bloque in respuesta.iter_content(chunk_size=1024 * 1024):
             if not bloque:
@@ -551,7 +551,25 @@ def descargar_archivo(url: str) -> dict:
 
             bloques.append(bloque)
 
+            if progreso is not None:
+                if total_esperado and total_esperado > 0:
+                    porcentaje = min(total / total_esperado, 1.0)
+                    progreso(
+                        porcentaje,
+                        total,
+                        total_esperado,
+                    )
+                else:
+                    progreso(
+                        None,
+                        total,
+                        None,
+                    )
+
         contenido = b"".join(bloques)
+
+        if progreso is not None:
+            progreso(1.0, total, total_esperado)
 
         if not contenido:
             raise ValueError("El servidor respondió sin contenido.")
@@ -678,8 +696,41 @@ else:
     try:
         validar_url_publica(url)
 
-        with st.spinner("Cargando creativo..."):
-            archivo = descargar_archivo(url)
+        contenedor_carga = st.empty()
+        barra_carga = st.progress(0, text="Iniciando descarga...")
+
+        def actualizar_progreso(
+            porcentaje: float | None,
+            descargado: int,
+            total: int | None,
+        ) -> None:
+            descargado_mb = descargado / (1024 * 1024)
+
+            if porcentaje is not None and total:
+                total_mb = total / (1024 * 1024)
+                barra_carga.progress(
+                    int(porcentaje * 100),
+                    text=(
+                        f"Descargando creativo... "
+                        f"{descargado_mb:.1f} MB de {total_mb:.1f} MB"
+                    ),
+                )
+            else:
+                # Cuando el servidor no informa el tamaño total,
+                # se muestra el avance descargado sin porcentaje real.
+                barra_carga.progress(
+                    0,
+                    text=f"Descargando creativo... {descargado_mb:.1f} MB",
+                )
+
+        try:
+            archivo = descargar_archivo(
+                url,
+                progreso=actualizar_progreso,
+            )
+        finally:
+            barra_carga.empty()
+            contenedor_carga.empty()
 
         if archivo["tipo"] == "audio":
             st.audio(
