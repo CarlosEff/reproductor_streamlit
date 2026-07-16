@@ -144,7 +144,7 @@ st.markdown(
         [data-testid="stVideo"] video {{
             width: 100% !important;
             height: auto !important;
-            max-height: 430px !important;
+            max-height: 300px !important;
             object-fit: contain;
             background: #000000;
         }}
