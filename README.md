@@ -1,32 +1,15 @@
-# Reproductor multimedia en Streamlit
+# Effective Creative Player
 
-Aplicación para reproducir enlaces que descargan archivos de audio o video.
+Reproductor Streamlit con encabezado y pie de página de Effective.
 
-También convierte temporalmente archivos WMV, AVI, MPEG y MPG a MP4 mediante FFmpeg para mejorar su compatibilidad con navegadores.
+## Deploy
 
-## Archivos
+- Main file: `app.py`
+- Python dependencies: `requirements.txt`
+- System packages: `packages.txt`
 
-- `app.py`: aplicación principal.
-- `requirements.txt`: dependencias de Python.
-- `packages.txt`: instala FFmpeg en Streamlit Community Cloud.
-- `.gitignore`: archivos que Git no debe subir.
-
-## Configuración en Streamlit Community Cloud
-
-- Repository: `CarlosEff/reproductor_streamlit`
-- Branch: `main`
-- Main file path: `app.py`
-
-## Uso
-
-Pega una URL en la aplicación o abre directamente:
+La app recibe el creativo mediante:
 
 ```text
 https://effective-creative-repo.streamlit.app/?url=URL_CODIFICADA
-```
-
-Ejemplo:
-
-```text
-https://effective-creative-repo.streamlit.app/?url=https%3A%2F%2Fauditsa.com.mx%2Fw%2F3KAjIwejF
 ```

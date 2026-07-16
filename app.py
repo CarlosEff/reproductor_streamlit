@@ -11,32 +11,211 @@ import requests
 import streamlit as st
 
 
-# URL pública de esta aplicación.
 URL_APP = "https://effective-creative-repo.streamlit.app/"
+LOGO_SUPERIOR = "https://effective.com.mx/wp-content/uploads/2024/10/logo-main-nav.png"
+LOGO_INFERIOR = "https://effective.com.mx/wp-content/uploads/2024/10/logo-w-vert-200x34.png"
 
-# Límite de seguridad para evitar cargar archivos demasiado grandes.
 MAX_FILE_SIZE_MB = 250
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
 
 
 st.set_page_config(
-    page_title="Reproductor multimedia",
+    page_title="Effective | Reproductor",
     page_icon="▶️",
-    layout="centered",
+    layout="wide",
+    initial_sidebar_state="collapsed",
 )
 
-st.title("▶️ Reproductor de audio y video")
-st.write(
-    "Pega una liga que descargue un audio o video. "
-    "La aplicación obtiene el archivo y lo muestra en un reproductor."
+
+st.markdown(
+    f"""
+    <style>
+        .stApp {{
+            background: #ffffff;
+        }}
+
+        header[data-testid="stHeader"] {{
+            background: transparent;
+        }}
+
+        [data-testid="stToolbar"] {{
+            display: none;
+        }}
+
+        #MainMenu {{
+            visibility: hidden;
+        }}
+
+        footer {{
+            visibility: hidden;
+        }}
+
+        .block-container {{
+            max-width: 1120px;
+            padding-top: 105px;
+            padding-bottom: 135px;
+        }}
+
+        .effective-header {{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 74px;
+            background: #050505;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #7a7a7a;
+            box-shadow: 0 1px 4px rgba(0,0,0,.18);
+        }}
+
+        .effective-header-inner {{
+            width: 100%;
+            max-width: 1060px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 22px;
+        }}
+
+        .effective-header img {{
+            width: 185px;
+            height: auto;
+            display: block;
+        }}
+
+        .effective-header-title {{
+            color: #f2c500;
+            font-size: 14px;
+            letter-spacing: .04em;
+            font-weight: 500;
+        }}
+
+        .effective-footer {{
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 105px;
+            background: #050505;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+        }}
+
+        .effective-footer-inner {{
+            width: 100%;
+            max-width: 1060px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 22px;
+        }}
+
+        .effective-footer img {{
+            width: 200px;
+            height: auto;
+            display: block;
+        }}
+
+        .effective-footer-text {{
+            color: #d8d8d8;
+            font-size: 13px;
+        }}
+
+        .player-shell {{
+            background: #ffffff;
+            border: 1px solid #e2e2e2;
+            border-radius: 2px;
+            box-shadow: 0 8px 26px rgba(0,0,0,.08);
+            padding: 28px;
+            margin-top: 8px;
+        }}
+
+        .player-title {{
+            font-size: 25px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #111111;
+        }}
+
+        .share-label {{
+            font-size: 14px;
+            font-weight: 600;
+            color: #111111;
+            margin-top: 22px;
+            margin-bottom: 8px;
+        }}
+
+        .stTextInput > div > div > input {{
+            border-radius: 2px;
+        }}
+
+        .stButton > button,
+        .stLinkButton > a {{
+            border-radius: 2px;
+            background: #f2c500;
+            color: #111111;
+            border: 0;
+            font-weight: 700;
+        }}
+
+        .stButton > button:hover,
+        .stLinkButton > a:hover {{
+            background: #d9b100;
+            color: #111111;
+        }}
+
+        @media (max-width: 700px) {{
+            .block-container {{
+                padding-top: 95px;
+                padding-bottom: 125px;
+            }}
+
+            .effective-header-title {{
+                display: none;
+            }}
+
+            .effective-header img {{
+                width: 155px;
+            }}
+
+            .effective-footer-inner {{
+                justify-content: center;
+            }}
+
+            .effective-footer-text {{
+                display: none;
+            }}
+
+            .player-shell {{
+                padding: 18px;
+            }}
+        }}
+    </style>
+
+    <div class="effective-header">
+        <div class="effective-header-inner">
+            <img src="{LOGO_SUPERIOR}" alt="Effective">
+            <div class="effective-header-title">REPRODUCTOR DE CREATIVOS</div>
+        </div>
+    </div>
+
+    <div class="effective-footer">
+        <div class="effective-footer-inner">
+            <img src="{LOGO_INFERIOR}" alt="Effective">
+            <div class="effective-footer-text">Aviso de privacidad</div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 
 def validar_url_publica(url: str) -> None:
-    """
-    Permite únicamente HTTP/HTTPS y bloquea direcciones locales o privadas.
-    Esto es importante porque la app estará publicada en Internet.
-    """
     parsed = urlparse(url)
 
     if parsed.scheme not in {"http", "https"}:
@@ -51,8 +230,7 @@ def validar_url_publica(url: str) -> None:
         raise ValueError("No se pudo resolver el dominio de la URL.") from error
 
     for direccion in direcciones:
-        ip_texto = direccion[4][0]
-        ip = ipaddress.ip_address(ip_texto)
+        ip = ipaddress.ip_address(direccion[4][0])
 
         if (
             ip.is_private
@@ -73,9 +251,6 @@ def descargar_con_redirecciones(
     timeout: int = 90,
     max_redirecciones: int = 8,
 ) -> requests.Response:
-    """
-    Sigue redirecciones manualmente para validar cada destino.
-    """
     url_actual = url
 
     for _ in range(max_redirecciones + 1):
@@ -116,12 +291,6 @@ def detectar_tipo_archivo(
     url: str,
     primeros_bytes: bytes,
 ) -> tuple[str | None, str, str]:
-    """
-    Devuelve:
-    - tipo: audio, video o None
-    - extensión sugerida
-    - MIME apropiado para el reproductor
-    """
     content_type_limpio = (content_type or "").lower().split(";")[0].strip()
     extension_url = Path(urlparse(url).path).suffix.lower()
 
@@ -166,14 +335,12 @@ def detectar_tipo_archivo(
 
         return "video", extension, content_type_limpio
 
-    # MP3
     if primeros_bytes.startswith(b"ID3"):
         return "audio", ".mp3", "audio/mpeg"
 
     if primeros_bytes[:2] in (b"\xff\xfb", b"\xff\xf3", b"\xff\xf2"):
         return "audio", ".mp3", "audio/mpeg"
 
-    # WAV o AVI
     if primeros_bytes.startswith(b"RIFF"):
         if b"WAVE" in primeros_bytes[:16]:
             return "audio", ".wav", "audio/wav"
@@ -181,7 +348,6 @@ def detectar_tipo_archivo(
         if b"AVI " in primeros_bytes[:16]:
             return "video", ".avi", "video/x-msvideo"
 
-    # MP4, M4A o MOV
     if b"ftyp" in primeros_bytes[:32]:
         if extension_url in {".m4a", ".aac"}:
             return "audio", extension_url, mapa_audio.get(extension_url, "audio/mp4")
@@ -189,12 +355,10 @@ def detectar_tipo_archivo(
         extension = extension_url if extension_url in mapa_video else ".mp4"
         return "video", extension, mapa_video.get(extension, "video/mp4")
 
-    # WebM / Matroska
     if primeros_bytes.startswith(b"\x1aE\xdf\xa3"):
         extension = extension_url if extension_url in {".webm", ".mkv"} else ".webm"
         return "video", extension, "video/webm"
 
-    # ASF: normalmente WMA o WMV
     if primeros_bytes.startswith(b"0&\xb2u\x8ef\xcf\x11"):
         if extension_url == ".wma":
             return "audio", ".wma", "audio/x-ms-wma"
@@ -283,12 +447,8 @@ def descargar_archivo(url: str) -> dict:
 
 @st.cache_data(show_spinner=False, ttl=1800)
 def convertir_video_a_mp4(contenido: bytes, extension_entrada: str) -> bytes:
-    """
-    Convierte formatos no compatibles con el navegador, como WMV, a MP4.
-    """
     ruta_entrada = None
     ruta_salida = None
-
     extension_segura = extension_entrada if extension_entrada.startswith(".") else ".wmv"
 
     try:
@@ -372,27 +532,19 @@ def necesita_conversion_mp4(archivo: dict) -> bool:
     )
 
 
-url_parametro = st.query_params.get("url", "")
+st.markdown('<div class="player-shell">', unsafe_allow_html=True)
+st.markdown('<div class="player-title">Reproductor de creativo</div>', unsafe_allow_html=True)
 
-url = st.text_input(
-    "URL del audio o video",
-    value=url_parametro,
-    placeholder="https://auditsa.com.mx/w/...",
-)
+url = st.query_params.get("url", "")
 
-if url:
+if not url:
+    st.info("Este enlace no contiene un creativo para reproducir.")
+else:
     try:
         validar_url_publica(url)
 
-        with st.spinner("Descargando contenido..."):
+        with st.spinner("Cargando creativo..."):
             archivo = descargar_archivo(url)
-
-        tamano_mb = archivo["tamano"] / (1024 * 1024)
-
-        st.caption(
-            f"Tipo recibido: {archivo['content_type']} · "
-            f"Tamaño: {tamano_mb:.2f} MB"
-        )
 
         if archivo["tipo"] == "audio":
             st.audio(
@@ -402,7 +554,7 @@ if url:
 
         elif archivo["tipo"] == "video":
             if necesita_conversion_mp4(archivo):
-                with st.spinner("Convirtiendo el video a MP4..."):
+                with st.spinner("Preparando video..."):
                     video_mp4 = convertir_video_a_mp4(
                         archivo["contenido"],
                         archivo["extension"],
@@ -412,7 +564,6 @@ if url:
                     video_mp4,
                     format="video/mp4",
                 )
-
             else:
                 st.video(
                     archivo["contenido"],
@@ -420,28 +571,16 @@ if url:
                 )
 
         else:
-            st.warning(
-                "No se pudo identificar automáticamente si el archivo "
-                "es audio o video."
-            )
-
-            tipo_manual = st.radio(
-                "Selecciona el tipo de contenido",
-                ["Audio", "Video"],
-                horizontal=True,
-            )
-
-            if tipo_manual == "Audio":
-                st.audio(archivo["contenido"])
-            else:
-                st.video(archivo["contenido"])
+            st.error("No se pudo identificar el formato del creativo.")
 
         enlace_compartir = (
             f"{URL_APP.rstrip('/')}/?url={quote(url, safe='')}"
         )
 
-        st.divider()
-        st.write("**Enlace directo para compartir:**")
+        st.markdown(
+            '<div class="share-label">Enlace directo para compartir</div>',
+            unsafe_allow_html=True,
+        )
         st.code(enlace_compartir, language=None)
         st.link_button("Abrir enlace directo", enlace_compartir)
 
@@ -461,3 +600,5 @@ if url:
 
     except Exception as error:
         st.error(f"Ocurrió un error: {error}")
+
+st.markdown("</div>", unsafe_allow_html=True)
