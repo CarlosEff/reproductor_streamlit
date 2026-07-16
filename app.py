@@ -41,30 +41,41 @@ st.set_page_config(
 st.markdown(
     f"""
     <style>
+        html,
+        body,
+        [data-testid="stAppViewContainer"],
+        .stApp {{
+            height: 100%;
+            overflow: hidden;
+        }}
+
         .stApp {{
             background: #ffffff;
         }}
 
         header[data-testid="stHeader"] {{
             background: transparent;
+            height: 0;
         }}
 
-        [data-testid="stToolbar"] {{
-            display: none;
-        }}
-
-        #MainMenu {{
-            visibility: hidden;
-        }}
-
+        [data-testid="stToolbar"],
+        [data-testid="stDecoration"],
+        #MainMenu,
         footer {{
-            visibility: hidden;
+            display: none !important;
         }}
 
         .block-container {{
-            max-width: 1120px;
+            width: 100%;
+            max-width: 940px;
+            height: 100vh;
+            box-sizing: border-box;
+            margin: 0 auto;
             padding-top: 82px;
-            padding-bottom: 84px;
+            padding-bottom: 80px;
+            padding-left: 16px;
+            padding-right: 16px;
+            overflow: hidden;
         }}
 
         .effective-header {{
@@ -131,75 +142,94 @@ st.markdown(
             align-items: center;
             justify-content: space-between;
             padding: 0 22px;
+            box-sizing: border-box;
         }}
 
         .effective-footer img {{
-            width: 200px;
+            width: 180px;
             height: auto;
             display: block;
         }}
 
         .effective-footer-text {{
             color: #d8d8d8;
-            font-size: 13px;
-        }}
-
-        .player-shell {{
-            background: #ffffff;
-            border: 1px solid #e2e2e2;
-            border-radius: 2px;
-            box-shadow: 0 8px 26px rgba(0,0,0,.08);
-            padding: 28px;
-            margin-top: 8px;
+            font-size: 12px;
         }}
 
         .player-title {{
-            font-size: 25px;
+            font-size: 22px;
+            line-height: 1.1;
             font-weight: 700;
-            margin: 0 0 10px 0;
+            margin: 0 0 7px 0;
             color: #111111;
         }}
 
         [data-testid="stVideo"] {{
-            margin: 0 !important;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto !important;
         }}
 
         [data-testid="stVideo"] video {{
+            display: block;
             width: 100% !important;
             height: auto !important;
-            max-height: calc(100vh - 340px) !important;
+            max-height: calc(100vh - 300px) !important;
             object-fit: contain;
             background: #000000;
         }}
 
+        [data-testid="stAudio"] {{
+            margin: 6px 0 0 0 !important;
+        }}
+
         .share-label {{
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
             color: #111111;
-            margin-top: 22px;
-            margin-bottom: 8px;
+            margin-top: 6px;
+            margin-bottom: 3px;
         }}
 
-        .stTextInput > div > div > input {{
-            border-radius: 2px;
+        [data-testid="stCode"] {{
+            margin: 0 !important;
         }}
 
-        .stButton > button,
+        [data-testid="stCode"] pre {{
+            padding: 5px 8px !important;
+            font-size: 10px !important;
+            line-height: 1.1 !important;
+            max-height: 38px;
+            overflow: hidden;
+        }}
+
+        .stLinkButton {{
+            margin-top: 2px;
+        }}
+
         .stLinkButton > a {{
+            min-height: 28px;
+            padding: 4px 11px;
             border-radius: 2px;
             background: #f2c500;
             color: #111111;
             border: 0;
+            font-size: 11px;
             font-weight: 700;
         }}
 
-        .stButton > button:hover,
         .stLinkButton > a:hover {{
             background: #d9b100;
             color: #111111;
         }}
 
         @media (max-width: 900px) {{
+            .block-container {{
+                max-width: 820px;
+                padding-left: 12px;
+                padding-right: 12px;
+            }}
+
             .effective-header-inner,
             .effective-footer-inner {{
                 padding: 0 16px;
@@ -210,29 +240,41 @@ st.markdown(
             }}
 
             .effective-footer img {{
-                width: 165px;
+                width: 155px;
             }}
 
             .effective-header-title {{
                 font-size: 15px;
             }}
 
-            .effective-footer-text {{
-                font-size: 11px;
+            [data-testid="stVideo"] {{
+                max-width: 780px;
             }}
 
             [data-testid="stVideo"] video {{
-                max-height: calc(100vh - 320px) !important;
+                max-height: calc(100vh - 285px) !important;
             }}
         }}
 
         @media (max-width: 600px) {{
-            .effective-header {{
+            html,
+            body,
+            [data-testid="stAppViewContainer"],
+            .stApp {{
+                overflow: auto;
+            }}
+
+            .effective-header,
+            .effective-footer {{
                 height: 64px;
             }}
 
-            .effective-footer {{
-                height: 64px;
+            .block-container {{
+                height: auto;
+                min-height: 100vh;
+                padding-top: 70px;
+                padding-bottom: 70px;
+                overflow: visible;
             }}
 
             .effective-header-inner,
@@ -263,15 +305,12 @@ st.markdown(
                 max-width: 38vw;
             }}
 
-            .block-container {{
-                padding-top: 70px;
-                padding-bottom: 70px;
-                padding-left: 12px;
-                padding-right: 12px;
+            .player-title {{
+                font-size: 19px;
             }}
 
             [data-testid="stVideo"] video {{
-                max-height: calc(100vh - 285px) !important;
+                max-height: 52vh !important;
             }}
         }}
 
@@ -286,39 +325,10 @@ st.markdown(
                 display: none;
             }}
 
-            .effective-header img {{
-                width: 145px;
-                max-width: 70vw;
-            }}
-
+            .effective-header img,
             .effective-footer img {{
                 width: 145px;
                 max-width: 70vw;
-            }}
-
-            [data-testid="stVideo"] video {{
-                max-height: calc(100vh - 260px) !important;
-            }}
-        }}
-
-            .effective-header-title {{
-                display: none;
-            }}
-
-            .effective-header img {{
-                width: 155px;
-            }}
-
-            .effective-footer-inner {{
-                justify-content: center;
-            }}
-
-            .effective-footer-text {{
-                display: none;
-            }}
-
-            .player-shell {{
-                padding: 18px;
             }}
         }}
     </style>
@@ -725,4 +735,3 @@ else:
 
     except Exception as error:
         st.error(f"Ocurrió un error: {error}")
-
