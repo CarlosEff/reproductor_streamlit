@@ -141,43 +141,66 @@ st.markdown(
             margin-bottom: 18px;
             color: #111111;
         }}
-        [data-testid="stVideo"] video {{
-            width: 100% !important;
-            height: auto !important;
-            max-height: 50px !important;
-            object-fit: contain;
-            background: #000000;
-        }}
+        
+        
+    </style>
 
-        .share-label {{
-            font-size: 14px;
-            font-weight: 600;
-            color: #111111;
-            margin-top: 22px;
-            margin-bottom: 8px;
-        }}
+    <div class="effective-header">
+        <div class="effective-header-inner">
+            <img src="{LOGO_SUPERIOR}" alt="Effective">
+            <div class="effective-header-title">REPRODUCTOR DE CREATIVOS</div>
+        </div>
+    </div>
 
-        .stTextInput > div > div > input {{
-            border-radius: 2px;
-        }}
+    <div class="effective-footer">
+        <div class="effective-footer-inner">
+            <img src="{LOGO_INFERIOR}" alt="Effective">
+            <div class="effective-footer-text">Aviso de privacidad</div>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+[data-testid="stVideo"] {{
+    margin: 0 !important;
+}}
 
-        .stButton > button,
-        .stLinkButton > a {{
-            border-radius: 2px;
-            background: #f2c500;
-            color: #111111;
-            border: 0;
-            font-weight: 700;
-        }}
+[data-testid="stVideo"] video {{
+    width: 100% !important;
+    height: auto !important;
+    max-height: calc(100vh - 340px) !important;
+    object-fit: contain;
+    background: #000000;
+}}
 
-        .stButton > button:hover,
-        .stLinkButton > a:hover {{
-            background: #d9b100;
-            color: #111111;
-        }}
-    
+.share-label {{
+    font-size: 14px;
+    font-weight: 600;
+    color: #111111;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}}
 
-    @media (max-width: 900px) {{
+.stTextInput > div > div > input {{
+    border-radius: 2px;
+}}
+
+.stButton > button,
+.stLinkButton > a {{
+    border-radius: 2px;
+    background: #f2c500;
+    color: #111111;
+    border: 0;
+    font-weight: 700;
+}}
+
+.stButton > button:hover,
+.stLinkButton > a:hover {{
+    background: #d9b100;
+    color: #111111;
+}}
+
+@media (max-width: 900px) {{
     .effective-header-inner,
     .effective-footer-inner {{
         padding: 0 16px;
@@ -197,6 +220,10 @@ st.markdown(
 
     .effective-footer-text {{
         font-size: 11px;
+    }}
+
+    [data-testid="stVideo"] video {{
+        max-height: calc(100vh - 330px) !important;
     }}
 }}
 
@@ -239,8 +266,14 @@ st.markdown(
     }}
 
     .block-container {{
+        padding-top: 78px;
+        padding-bottom: 92px;
         padding-left: 12px;
         padding-right: 12px;
+    }}
+
+    [data-testid="stVideo"] video {{
+        max-height: calc(100vh - 300px) !important;
     }}
 }}
 
@@ -264,27 +297,11 @@ st.markdown(
         width: 145px;
         max-width: 70vw;
     }}
+
+    [data-testid="stVideo"] video {{
+        max-height: calc(100vh - 285px) !important;
+    }}
 }}
-        
-    </style>
-
-    <div class="effective-header">
-        <div class="effective-header-inner">
-            <img src="{LOGO_SUPERIOR}" alt="Effective">
-            <div class="effective-header-title">REPRODUCTOR DE CREATIVOS</div>
-        </div>
-    </div>
-
-    <div class="effective-footer">
-        <div class="effective-footer-inner">
-            <img src="{LOGO_INFERIOR}" alt="Effective">
-            <div class="effective-footer-text">Aviso de privacidad</div>
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
 
 def validar_url_publica(url: str) -> None:
     parsed = urlparse(url)
