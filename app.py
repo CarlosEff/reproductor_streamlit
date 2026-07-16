@@ -4,6 +4,7 @@ import os
 import socket
 import subprocess
 import tempfile
+import base64
 
 from pathlib import Path
 from urllib.parse import quote, urljoin, urlparse
@@ -12,9 +13,18 @@ import requests
 import streamlit as st
 
 
+
+def imagen_base64(ruta: str) -> str:
+    with open(ruta, "rb") as archivo:
+        contenido = base64.b64encode(archivo.read()).decode()
+
+    extension = Path(ruta).suffix.lower().replace(".", "")
+    return f"data:image/{extension};base64,{contenido}"
+
+
 URL_APP = "https://effective-creative-repo.streamlit.app/"
-LOGO_SUPERIOR = "logo-main-nav.png"
-LOGO_INFERIOR = "logo-w-vert-200x34.png"
+LOGO_SUPERIOR = imagen_base64("logo-main-nav.png")
+LOGO_INFERIOR = imagen_base64("logo-w-vert-200x34.png")
 
 MAX_FILE_SIZE_MB = 250
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
