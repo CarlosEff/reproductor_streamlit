@@ -696,41 +696,8 @@ else:
     try:
         validar_url_publica(url)
 
-        contenedor_carga = st.empty()
-        barra_carga = st.progress(0, text="Iniciando descarga...")
-
-        def actualizar_progreso(
-            porcentaje: float | None,
-            descargado: int,
-            total: int | None,
-        ) -> None:
-            descargado_mb = descargado / (1024 * 1024)
-
-            if porcentaje is not None and total:
-                total_mb = total / (1024 * 1024)
-                barra_carga.progress(
-                    int(porcentaje * 100),
-                    text=(
-                        f"Descargando creativo... "
-                        f"{descargado_mb:.1f} MB de {total_mb:.1f} MB"
-                    ),
-                )
-            else:
-                # Cuando el servidor no informa el tamaño total,
-                # se muestra el avance descargado sin porcentaje real.
-                barra_carga.progress(
-                    0,
-                    text=f"Descargando creativo... {descargado_mb:.1f} MB",
-                )
-
-        try:
-            archivo = descargar_archivo(
-                url,
-                progreso=actualizar_progreso,
-            )
-        finally:
-            barra_carga.empty()
-            contenedor_carga.empty()
+        with st.spinner("Cargando creativo..."):
+            archivo = descargar_archivo(url)
 
         if archivo["tipo"] == "audio":
             st.audio(
