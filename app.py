@@ -13,8 +13,8 @@ import streamlit as st
 
 
 URL_APP = "https://effective-creative-repo.streamlit.app/"
-LOGO_SUPERIOR = "app/static/logo-main-nav.png"
-LOGO_INFERIOR = "app/static/logo-w-vert-200x34.png"
+LOGO_SUPERIOR = "logo-main-nav.png"
+LOGO_INFERIOR = "logo-w-vert-200x34.png"
 
 MAX_FILE_SIZE_MB = 250
 MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
