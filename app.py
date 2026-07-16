@@ -126,15 +126,7 @@ st.markdown(
             font-size: 13px;
         }}
 
-        .player-shell {{
-            background: #ffffff;
-            border: 1px solid #e2e2e2;
-            border-radius: 2px;
-            box-shadow: 0 8px 26px rgba(0,0,0,.08);
-            padding: 28px;
-            margin-top: 8px;
-        }}
-
+       
         .player-title {{
             font-size: 25px;
             font-weight: 700;
@@ -532,7 +524,7 @@ def necesita_conversion_mp4(archivo: dict) -> bool:
     )
 
 
-st.markdown('<div class="player-shell">', unsafe_allow_html=True)
+
 st.markdown('<div class="player-title">Reproductor de creativo</div>', unsafe_allow_html=True)
 
 url = st.query_params.get("url", "")
@@ -601,4 +593,4 @@ else:
     except Exception as error:
         st.error(f"Ocurrió un error: {error}")
 
-st.markdown("</div>", unsafe_allow_html=True)
+
