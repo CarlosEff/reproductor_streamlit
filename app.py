@@ -532,7 +532,6 @@ def necesita_conversion_mp4(archivo: dict) -> bool:
     )
 
 
-st.markdown('<div class="player-shell">', unsafe_allow_html=True)
 st.markdown('<div class="player-title">Reproductor de creativo</div>', unsafe_allow_html=True)
 
 url = st.query_params.get("url", "")
@@ -600,5 +599,3 @@ else:
 
     except Exception as error:
         st.error(f"Ocurrió un error: {error}")
-
-st.markdown("</div>", unsafe_allow_html=True)
