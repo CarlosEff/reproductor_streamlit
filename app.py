@@ -52,8 +52,8 @@ st.markdown(
 
         .block-container {{
             max-width: 1120px;
-            padding-top: 105px;
-            padding-bottom: 135px;
+            padding-top: 82px;
+            padding-bottom: 84px;
         }}
 
         .effective-header {{
@@ -105,7 +105,7 @@ st.markdown(
             left: 0;
             right: 0;
             bottom: 0;
-            height: 105px;
+            height: 74px;
             background: #050505;
             z-index: 9999;
             display: flex;
@@ -145,7 +145,7 @@ st.markdown(
         .player-title {{
             font-size: 25px;
             font-weight: 700;
-            margin-bottom: 18px;
+            margin: 0 0 10px 0;
             color: #111111;
         }}
 
@@ -221,7 +221,7 @@ st.markdown(
             }}
 
             .effective-footer {{
-                height: 78px;
+                height: 64px;
             }}
 
             .effective-header-inner,
@@ -253,8 +253,8 @@ st.markdown(
             }}
 
             .block-container {{
-                padding-top: 74px;
-                padding-bottom: 88px;
+                padding-top: 70px;
+                padding-bottom: 70px;
                 padding-left: 12px;
                 padding-right: 12px;
             }}
@@ -647,7 +647,6 @@ def necesita_conversion_mp4(archivo: dict) -> bool:
     )
 
 
-st.markdown('<div class="player-shell">', unsafe_allow_html=True)
 st.markdown('<div class="player-title">Reproductor de creativo</div>', unsafe_allow_html=True)
 
 url = st.query_params.get("url", "")
@@ -716,4 +715,3 @@ else:
     except Exception as error:
         st.error(f"Ocurrió un error: {error}")
 
-st.markdown("</div>", unsafe_allow_html=True)
