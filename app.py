@@ -176,32 +176,94 @@ st.markdown(
             color: #111111;
         }}
 
-        @media (max-width: 700px) {{
-            .block-container {{
-                padding-top: 95px;
-                padding-bottom: 125px;
-            }}
+    @media (max-width: 900px) {
+    .effective-header-inner,
+    .effective-footer-inner {
+        padding: 0 16px;
+    }
 
-            .effective-header-title {{
-                display: none;
-            }}
+    .effective-header img {
+        width: 150px;
+    }
 
-            .effective-header img {{
-                width: 155px;
-            }}
+    .effective-footer img {
+        width: 165px;
+    }
 
-            .effective-footer-inner {{
-                justify-content: center;
-            }}
+    .effective-header-title {
+        font-size: 12px;
+    }
 
-            .effective-footer-text {{
-                display: none;
-            }}
+    .effective-footer-text {
+        font-size: 11px;
+    }
+}
 
-            .player-shell {{
-                padding: 18px;
-            }}
-        }}
+@media (max-width: 600px) {
+    .effective-header {
+        height: 64px;
+    }
+
+    .effective-footer {
+        height: 78px;
+    }
+
+    .effective-header-inner,
+    .effective-footer-inner {
+        padding: 0 12px;
+        gap: 10px;
+    }
+
+    .effective-header img {
+        width: 125px;
+        max-width: 42vw;
+    }
+
+    .effective-footer img {
+        width: 135px;
+        max-width: 48vw;
+    }
+
+    .effective-header-title {
+        font-size: 10px;
+        text-align: right;
+        line-height: 1.2;
+        max-width: 45vw;
+    }
+
+    .effective-footer-text {
+        font-size: 10px;
+        text-align: right;
+        max-width: 38vw;
+    }
+
+    .block-container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+
+@media (max-width: 420px) {
+    .effective-header-inner,
+    .effective-footer-inner {
+        justify-content: center;
+    }
+
+    .effective-header-title,
+    .effective-footer-text {
+        display: none;
+    }
+
+    .effective-header img {
+        width: 145px;
+        max-width: 70vw;
+    }
+
+    .effective-footer img {
+        width: 145px;
+        max-width: 70vw;
+    }
+}          
     </style>
 
     <div class="effective-header">
