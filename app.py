@@ -189,12 +189,12 @@ if url:
 
         st.write("Enlace directo para compartir:")
 
+        URL_APP = "https://effective-creative-repo.streamlit.app/"
+
         st.code(
-            f"{st.get_option('browser.serverAddress') or ''}"
-            f"?url={url}",
+            f"{URL_APP}?url={url}",
             language=None,
         )
-
     except requests.exceptions.Timeout:
         st.error("El servidor tardó demasiado en responder.")
 
