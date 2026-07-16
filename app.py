@@ -141,6 +141,13 @@ st.markdown(
             margin-bottom: 18px;
             color: #111111;
         }}
+        [data-testid="stVideo"] video {{
+            width: 100% !important;
+            height: auto !important;
+            max-height: 430px !important;
+            object-fit: contain;
+            background: #000000;
+        }}
 
         .share-label {{
             font-size: 14px;
